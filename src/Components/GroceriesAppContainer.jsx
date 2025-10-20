@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ProductsContainer from "./ProductsContainer";
 import CartContainer from "./CartContainer";
+import NavBar from "./NavBar";
 
 export default function GroceriesAppContainer({ products }) {
   const [productQuantity, setQuantity] = useState(
@@ -61,50 +62,69 @@ export default function GroceriesAppContainer({ products }) {
     setCart(filteredCart);
   };
   const handleAddQuantity = (productId, mode) => {
-    const newProductQuantity = productQuantity.map((prod) => {
-      if (prod.id === productId) {
-        return { ...prod, quantity: prod.quantity + 1 };
-      }
-      return prod;
-    });
-    setQuantity(newProductQuantity);
-    return;
+    if (mode == "shop") {
+      const newProductQuantity = productQuantity.map((prod) => {
+        if (prod.id === productId) {
+          return { ...prod, quantity: prod.quantity + 1 };
+        }
+        return prod;
+      });
+      setQuantity(newProductQuantity);
+      return;
+    } else if (mode == "cart") {
+      const newCartQuantity = cart.map((prod) => {
+        if (prod.id === productId) {
+          return { ...prod, quantity: prod.quantity + 1 };
+        }
+        return prod;
+      });
+      setCart(newCartQuantity);
+      return;
+    }
   };
+
   const handleRemoveQuantity = (productId, mode) => {
-    const newProductQuantity = productQuantity.map((prod) => {
-      if (prod.id === productId && mode == "cart" && prod.quantity > 1) {
-        return { ...prod, quantity: prod.quantity - 1 };
-      } else if (prod.id === productId && mode == "shop" && prod.quantity > 0) {
-        return { ...prod, quantity: prod.quantity - 1 };
-      } else {
-        return { ...prod };
-      }
-    });
-    setQuantity(newProductQuantity);
-    return;
+    if (mode == "shop") {
+      const newProductQuantity = productQuantity.map((prod) => {
+        if (prod.id === productId && prod.quantity > 0) {
+          return { ...prod, quantity: prod.quantity - 1 };
+        }
+        return prod;
+      });
+      setQuantity(newProductQuantity);
+      return;
+    } else if (mode == "cart") {
+      const newCartQuantity = cart.map((prod) => {
+        if (prod.id === productId && prod.quantity > 1) {
+          return { ...prod, quantity: prod.quantity - 1 };
+        }
+        return prod;
+      });
+      setCart(newCartQuantity);
+      return;
+    }
   };
   return (
-    <div>
-      <div>
-        <ProductsContainer
-          products={products}
-          productQuantity={productQuantity}
-          setQuantity={setQuantity}
-          handleAddQuantity={handleAddQuantity}
-          handleRemoveQuantity={handleRemoveQuantity}
-          handleAddToCart={handleAddToCart}
-        />
-        ;
+    <div className="GroceriesApp-Container">
+      <div className="NavDiv">
+        <NavBar />
       </div>
-      <div>
-        <h1>Cart</h1>
-        <CartContainer
-          cart={cart}
-          handleRemoveFromCart={handleRemoveFromCart}
-          handleAddQuantity={handleAddQuantity}
-          handleRemoveQuantity={handleRemoveQuantity}
-        />
-      </div>
+      <ProductsContainer
+        products={products}
+        productQuantity={productQuantity}
+        setQuantity={setQuantity}
+        handleAddQuantity={handleAddQuantity}
+        handleRemoveQuantity={handleRemoveQuantity}
+        handleAddToCart={handleAddToCart}
+      />
+      <h1>Cart</h1>
+      <p className="CartCardInfo">{cart.length === 0 && "Cart is empty"}</p>
+      <CartContainer
+        cart={cart}
+        handleRemoveFromCart={handleRemoveFromCart}
+        handleAddQuantity={handleAddQuantity}
+        handleRemoveQuantity={handleRemoveQuantity}
+      />
     </div>
   );
 }

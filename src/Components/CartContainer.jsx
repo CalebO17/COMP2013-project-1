@@ -7,7 +7,7 @@ export default function CartContainer({
   handleRemoveQuantity,
 }) {
   return (
-    <div>
+    <div className="CartContainer">
       {cart.map((item) => (
         <CartCard
           key={item.id}
