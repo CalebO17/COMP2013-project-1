@@ -1,4 +1,7 @@
+//Quantity Counter is responsible for handling a quantity counter that can be increased or decreased certain amounts depending on the mode
 export default function QuantityCounter({
+  //Bringing in various quantity related functions, aswell as the productQuantity
+  // state and id/mode to differentiate which product is being used and whether its in a cart or the shop
   handleAddQuantity,
   handleRemoveQuantity,
   productQuantity,
@@ -15,8 +18,9 @@ export default function QuantityCounter({
           onClick={() => handleRemoveQuantity(id, mode)}
         >
           -
+          {/*Bringing in handleRemoveQuantity function designed to decrease quantity by 1*/}
         </button>
-        {/*id = which product we are using and mode is cart or not*/}
+        {/*id = which product we are using, mode = cart or shop*/}
       </div>
       <p>{productQuantity}</p>
       <div>
@@ -24,6 +28,7 @@ export default function QuantityCounter({
           className="QuantityBtn"
           onClick={() => handleAddQuantity(id, mode)}
         >
+          {/*Bringing in handleAddQuantity function designed to increase quantity by 1*/}
           +
         </button>
       </div>

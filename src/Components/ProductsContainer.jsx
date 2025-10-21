@@ -1,5 +1,7 @@
+//ProductsContainer is responsible for looping through the products array and displaying the information onto ProductCards
 import ProductCard from "./ProductCard";
 export default function ProductsContainer({
+  //Bringing in product related functions aswell as product states to be used
   products,
   productQuantity,
   handleAddQuantity,

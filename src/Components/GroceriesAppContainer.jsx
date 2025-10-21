@@ -4,6 +4,8 @@ import CartContainer from "./CartContainer";
 import NavBar from "./NavBar";
 
 export default function GroceriesAppContainer({ products }) {
+  //products.js file being brought in
+  //Creating a state for an array of objects representing each product
   const [productQuantity, setQuantity] = useState(
     products.map((prod) => {
       return {
@@ -16,14 +18,17 @@ export default function GroceriesAppContainer({ products }) {
   // new state for cart which starts as an empty array
   const [cart, setCart] = useState([]);
 
+  //Function to handle adding to cart
   const handleAddToCart = (productToAdd) => {
-    const currentProduct = products.find((prod) => prod.id === productToAdd.id);
-    const productInCart = cart.find((item) => item.id === productToAdd.id);
+    const currentProduct = products.find((prod) => prod.id === productToAdd.id); // Finding product in the products array
+    const productInCart = cart.find((item) => item.id === productToAdd.id); // Checking if product is in cart by looking through the cart array
     if (productToAdd.quantity === 0) {
-      alert("Please add quantity before adding to cart!");
+      alert("Please add quantity before adding to cart!"); // Cannot add an item with quantity "0" to the cart
       return;
     }
     if (!productInCart) {
+      //If the product is not in the cart, add it in
+      // Below is returning the previous cart array but with the updated new quantity and price to the current product
       setCart((prevCart) => {
         return [
           ...prevCart,
@@ -36,6 +41,7 @@ export default function GroceriesAppContainer({ products }) {
       });
     } else {
       setCart((prevCart) => {
+        // If the product is in the cart, remove the previous instance of it (using filter) and then add a new instance with updated quantity and total price
         prevCart = prevCart.filter(
           (item) => item.id !== productToAdd.id
         ); /* I was having an issue where I would have the proper quantity on an item
@@ -45,6 +51,8 @@ export default function GroceriesAppContainer({ products }) {
           constantly delete the old versions of items in the cart would work (and it does)
           but I know it might be overkill and there may be an easier way to do it without
           constantly filtering out the same item, but I couldnt seem to figure it out*/
+
+        // Below is returning the previous cart array but with the updated new quantity and price to the current product
         return [
           ...prevCart,
           {
@@ -56,75 +64,91 @@ export default function GroceriesAppContainer({ products }) {
       });
     }
   };
-
+  // Function to remove item from cart
   const handleRemoveFromCart = (cartItem) => {
-    const filteredCart = cart.filter((item) => item.id !== cartItem.id);
+    const filteredCart = cart.filter((item) => item.id !== cartItem.id); //Filter out selected item
     setCart(filteredCart);
   };
+
+  //Function to increase the quantity of an item by 1
   const handleAddQuantity = (productId, mode) => {
     if (mode == "shop") {
       const newProductQuantity = productQuantity.map((prod) => {
+        // If item is in shop, update accordingly
         if (prod.id === productId) {
-          return { ...prod, quantity: prod.quantity + 1 };
+          return { ...prod, quantity: prod.quantity + 1 }; // Return old product but update quantity by 1
         }
         return prod;
       });
-      setQuantity(newProductQuantity);
+      setQuantity(newProductQuantity); // Update the state with new product
       return;
     } else if (mode == "cart") {
       const newCartQuantity = cart.map((prod) => {
+        // If item is in cart, update accordingly
         if (prod.id === productId) {
-          return { ...prod, quantity: prod.quantity + 1 };
+          return { ...prod, quantity: prod.quantity + 1 }; // Return old product (prod) but update quantity by 1
         }
         return prod;
       });
-      setCart(newCartQuantity);
+      setCart(newCartQuantity); // Update the state with new cart
       return;
     }
   };
 
+  //Function to decrease quantity of an item by 1
   const handleRemoveQuantity = (productId, mode) => {
     if (mode == "shop") {
+      //If item is in shop, update accordingly
       const newProductQuantity = productQuantity.map((prod) => {
         if (prod.id === productId && prod.quantity > 0) {
-          return { ...prod, quantity: prod.quantity - 1 };
+          return { ...prod, quantity: prod.quantity - 1 }; // Return previous product with quantity 1 less ONLY if the quantity is above 0
         }
         return prod;
       });
-      setQuantity(newProductQuantity);
+      setQuantity(newProductQuantity); //Update state with new product quantity
       return;
     } else if (mode == "cart") {
+      //If item is in cart, update accordingly
       const newCartQuantity = cart.map((prod) => {
         if (prod.id === productId && prod.quantity > 1) {
-          return { ...prod, quantity: prod.quantity - 1 };
+          return { ...prod, quantity: prod.quantity - 1 }; // Return previous product with quantity 1 less ONLY if the quantity is above 1
         }
         return prod;
       });
-      setCart(newCartQuantity);
+      setCart(newCartQuantity); //Update state with new cart quantity
       return;
     }
   };
+
+  const handleClearCart = () => {
+    {
+      /*Clearing cart by setting it to its initial state of being an empty array */
+    }
+    setCart([]);
+  };
+
+  {
+    /*Passing the proper states and functions as props below*/
+  }
   return (
-    <div className="GroceriesApp-Container">
-      <div className="NavDiv">
-        <NavBar />
+    <div>
+      <NavBar quantity={cart.length} />
+      <div className="GroceriesApp-Container">
+        <ProductsContainer
+          products={products}
+          productQuantity={productQuantity}
+          handleAddQuantity={handleAddQuantity}
+          handleRemoveQuantity={handleRemoveQuantity}
+          handleAddToCart={handleAddToCart}
+        />
+        <CartContainer
+          cart={cart}
+          handleRemoveFromCart={handleRemoveFromCart}
+          handleAddQuantity={handleAddQuantity}
+          handleRemoveQuantity={handleRemoveQuantity}
+          handleClearCart={handleClearCart}
+        />
       </div>
-      <ProductsContainer
-        products={products}
-        productQuantity={productQuantity}
-        setQuantity={setQuantity}
-        handleAddQuantity={handleAddQuantity}
-        handleRemoveQuantity={handleRemoveQuantity}
-        handleAddToCart={handleAddToCart}
-      />
-      <h1>Cart</h1>
-      <p className="CartCardInfo">{cart.length === 0 && "Cart is empty"}</p>
-      <CartContainer
-        cart={cart}
-        handleRemoveFromCart={handleRemoveFromCart}
-        handleAddQuantity={handleAddQuantity}
-        handleRemoveQuantity={handleRemoveQuantity}
-      />
     </div>
   );
 }
