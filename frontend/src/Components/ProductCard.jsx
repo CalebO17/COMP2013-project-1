@@ -14,7 +14,7 @@ export default function ProductCard({
   handleRemoveQuantity,
   handleAddToCart,
 }) {
-  console.log(price); // This was just me testing the price variable when I was in the midst of figuring out if I succesfully got rid of the dollar sign
+  console.log(productQuantity); // This was just me testing the price variable when I was in the midst of figuring out if I succesfully got rid of the dollar sign
   return (
     <div className="ProductCard">
       <h3>{productName}</h3>

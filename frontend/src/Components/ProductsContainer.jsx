@@ -8,6 +8,7 @@ export default function ProductsContainer({
   handleRemoveQuantity,
   handleAddToCart,
 }) {
+  console.log(products);
   return (
     <div className="ProductsContainer">
       {products.map((product) => (

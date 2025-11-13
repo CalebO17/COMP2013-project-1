@@ -1,23 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductsContainer from "./ProductsContainer";
 import CartContainer from "./CartContainer";
 import NavBar from "./NavBar";
+import axios from "axios";
 
-export default function GroceriesAppContainer({ products }) {
-  //products.js file being brought in
+export default function GroceriesAppContainer(
+  {
+    /*products*/
+  }
+) {
+  const [products, setProducts] = useState([]);
+
   //Creating a state for an array of objects representing each product
-  const [productQuantity, setQuantity] = useState(
-    products.map((prod) => {
-      return {
-        id: prod.id,
-        quantity: 0,
-        price: prod.price.replace("$", ""),
-      };
-    })
-  );
+  const [productQuantity, setQuantity] = useState([]);
   // new state for cart which starts as an empty array
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    handleProductsDB();
+  }, []);
+
+  useEffect(() => {
+    setQuantity(
+      products.map((prod) => {
+        return {
+          id: prod.id,
+          quantity: 0,
+          price: prod.price.replace("$", ""),
+        };
+      })
+    );
+  }, [products]);
+
+  const handleProductsDB = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/products");
+      setProducts(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   //Function to handle adding to cart
   const handleAddToCart = (productToAdd) => {
     const currentProduct = products.find((prod) => prod.id === productToAdd.id); // Finding product in the products array
