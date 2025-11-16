@@ -47,8 +47,9 @@ export default function GroceriesAppContainer(
     try {
       const response = await axios.get("http://localhost:3000/products");
       console.log(response.data);
-      setProducts(response.data);
+      setProducts(response.data); // Update products state to data grabbed from intermediary API
       setQuantity(
+        // Set quantity according to data grabbed from intermediary API
         response.data.map((prod) => {
           return {
             _id: prod._id,
@@ -74,20 +75,21 @@ export default function GroceriesAppContainer(
 
   //Handling data submission
   const handleOnSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Preventing page from refreshing when submission happens
     try {
       if (isEditing) {
+        //If in editing mode, call handleOnUpdate function, reset form, and turn off editing mode
         handleOnUpdate(formData.id);
-        handleResetForm();
-        setIsEditing(false);
+        handleResetForm(); //Set form to default values (empty strings)
+        setIsEditing(false); // No longer in editing mode
       } else {
         await axios
-          .post("http://localhost:3000/products", formData)
+          .post("http://localhost:3000/products", formData) // If not in editing mode, post instead of patch (adding new data)
           .then((response) => {
-            setPostResponse(response.data);
+            setPostResponse(response.data); //Update post response so it knows to rerender without having to refresh the page
             console.log(response);
           })
-          .then(() => handleResetForm());
+          .then(() => handleResetForm()); //Set form to default values
       }
     } catch (error) {
       console.log(error.message);
@@ -105,9 +107,9 @@ export default function GroceriesAppContainer(
   const handleOnDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/products/${id}`
+        `http://localhost:3000/products/${id}` //using DELETE route of CRUD
       );
-      setPostResponse(response.data);
+      setPostResponse(response.data); //Setting post response so it knows to rerender without having to refresh
     } catch (error) {
       console.log(error.message);
     }
@@ -117,16 +119,16 @@ export default function GroceriesAppContainer(
   const handleOnEdit = async (id) => {
     try {
       const productToEdit = await axios.get(
-        `http://localhost:3000/products/${id}`
+        `http://localhost:3000/products/${id}` //Getting the product to be edited
       );
       setFormData({
-        productName: productToEdit.data.productName,
+        productName: productToEdit.data.productName, //Putting product info into form so the form can be used to edit the product info
         brand: productToEdit.data.brand,
         image: productToEdit.data.image,
         price: productToEdit.data.price,
         id: productToEdit.data._id,
       });
-      setIsEditing(true);
+      setIsEditing(true); // Turn on editing mode
     } catch (error) {
       console.log(error);
     }
@@ -136,10 +138,14 @@ export default function GroceriesAppContainer(
   const handleOnUpdate = async (id) => {
     try {
       const result = await axios.patch(
+        //Using patch AKA the update part of CRUD
         `http://localhost:3000/products/${id}`,
         formData
       );
-      setPostResponse({ message: result.data.message, date: result.data.date });
+      setPostResponse({ message: result.data.message, date: result.data.date }); //Setting post response so it rerenders due to the
+      //useEffect, and adding the date so that its different
+      // everytime something is updated. Otherwise you would only
+      // be able to update something once
     } catch (error) {
       console.log(error);
     }
