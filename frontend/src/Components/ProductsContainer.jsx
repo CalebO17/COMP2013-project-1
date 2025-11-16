@@ -7,20 +7,25 @@ export default function ProductsContainer({
   handleAddQuantity,
   handleRemoveQuantity,
   handleAddToCart,
+  handleOnDelete,
+  handleOnEdit,
 }) {
-  console.log(products);
+  console.log("Product Quantity");
+  console.log(productQuantity);
   return (
     <div className="ProductsContainer">
       {products.map((product) => (
         <ProductCard
-          key={product.id}
+          key={product._id}
           {...product}
           productQuantity={productQuantity.find(
-            (prod) => prod.id == product.id
+            (prod) => prod._id == product._id
           )}
           handleAddQuantity={handleAddQuantity}
           handleRemoveQuantity={handleRemoveQuantity}
           handleAddToCart={handleAddToCart}
+          handleOnDelete={handleOnDelete}
+          handleOnEdit={handleOnEdit}
         />
       ))}
     </div>

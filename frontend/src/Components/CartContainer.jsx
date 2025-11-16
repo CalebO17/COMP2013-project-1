@@ -25,7 +25,7 @@ export default function CartContainer({
         {/*Mapping out each CartCard*/}
         {cart.map((item) => (
           <CartCard
-            key={item.id}
+            key={item._id}
             {...item}
             handleRemoveFromCart={handleRemoveFromCart}
             handleAddQuantity={handleAddQuantity}
@@ -40,10 +40,13 @@ export default function CartContainer({
         </button>
         <button id="BuyButton">
           Checkout$
-          {cart.reduce(
-            (total, item) => (total + item.price * item.quantity).toFixed(2),
-            0
-          )}
+          {cart
+            .reduce(
+              (total, item) =>
+                total + parseFloat(item.price.replace("$", "")) * item.quantity,
+              0
+            )
+            .toFixed(2)}
           {/*calculating the entire value of the cart*/}
         </button>
       </div>

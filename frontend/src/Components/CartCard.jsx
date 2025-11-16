@@ -2,7 +2,7 @@
 import QuantityCounter from "./QuantityCounter"; // Importing QuantityCounter.jsx because it is part of the cartCard and will be used
 export default function CartCard({
   //Various variables and functions being brought in for usage
-  id,
+  _id,
   productName,
   quantity,
   price,
@@ -20,7 +20,7 @@ export default function CartCard({
         <p>{productName}</p>
         <p>{price}</p>
         <QuantityCounter
-          id={id}
+          _id={_id}
           productQuantity={quantity}
           handleAddQuantity={handleAddQuantity}
           handleRemoveQuantity={handleRemoveQuantity}
@@ -34,7 +34,7 @@ export default function CartCard({
         <button
           className="RemoveButton"
           onClick={() => {
-            handleRemoveFromCart({ id, productName, quantity, price });
+            handleRemoveFromCart({ _id, productName, quantity, price });
             {
               /*Bringing in a function that will handle the logic of removing an item from the cart */
             }

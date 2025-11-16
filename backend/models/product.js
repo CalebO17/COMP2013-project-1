@@ -6,7 +6,10 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   id: {
     type: String,
-    required: true,
+    required: false, //false because I opted to use _id as the id specified in my components when mapping and doing
+    // other things that require a key. I could have used the regular id and giving each submission of a form
+    // a random id using the crypto.uuid, however I opted just to use _id instead. Therefore, having an "id"
+    // is not a requirement, since "_id" is automatically generated anyways.
   },
   productName: {
     type: String,

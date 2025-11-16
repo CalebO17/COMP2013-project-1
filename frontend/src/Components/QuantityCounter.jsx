@@ -5,7 +5,7 @@ export default function QuantityCounter({
   handleAddQuantity,
   handleRemoveQuantity,
   productQuantity,
-  id,
+  _id,
   mode,
 }) {
   console.log(productQuantity);
@@ -15,7 +15,7 @@ export default function QuantityCounter({
       <div>
         <button
           className="QuantityBtn"
-          onClick={() => handleRemoveQuantity(id, mode)}
+          onClick={() => handleRemoveQuantity(_id, mode)}
         >
           -
           {/*Bringing in handleRemoveQuantity function designed to decrease quantity by 1*/}
@@ -26,7 +26,7 @@ export default function QuantityCounter({
       <div>
         <button
           className="QuantityBtn"
-          onClick={() => handleAddQuantity(id, mode)}
+          onClick={() => handleAddQuantity(_id, mode)}
         >
           {/*Bringing in handleAddQuantity function designed to increase quantity by 1*/}
           +
